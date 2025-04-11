@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: hellodb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: localdev
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend-svc:
+    build: ./backend-svc
+    environment:
+      DATABASE_URL: postgres://postgres:localdev@postgres:5432/hellodb
+    ports:
+      - "3001:3001"
+
+  api-svc:
+    build: ./api-svc
+    environment:
+      BACKEND_URL: http://backend-svc:3001
+    ports:
+      - "3000:3000"
