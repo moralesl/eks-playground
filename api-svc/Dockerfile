@@ -1,4 +1,4 @@
-FROM node:23-slim AS builder
+FROM --platform=linux/amd64 node:23-slim AS builder
 
 WORKDIR /app
 COPY package*.json ./
